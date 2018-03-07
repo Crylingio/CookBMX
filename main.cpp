@@ -16,6 +16,8 @@ struct Charac {
 	string race = "HAH";
 	string name;
 	int seed;
+	double difficulty = 1;
+	string difficultyname = "Bicyclist";
 	int day = 0;
 	int loop = 1;
 	int ing = 10;
@@ -95,6 +97,14 @@ void ride() {
 	Char.bikeHP -= bikeLoss;
 }
 
+void stats() {
+system("CLS");
+cout << "-*- Stats -*-" << endl;
+cout << "\nName: " << Char.name << "\nRace: " << Char.race << "\n\nDifficulty: " << Char.difficultyname << "\n\nScore: " << Char.score << "\nScore Multiplier: " << Char.scoremp << "x"<< endl;
+cout << "\nRoute: " << Char.route << "\nDays Left: " << Char.day << "\nTotal Days Biked: " << Char.totaldaysbiked << "\n\nEnemies Killed: " << Char.enemiesk << "\nIngredients: " << Char.ing << endl;
+wait_enter();
+}
+
 void cooky() {
 	int cookput;
 
@@ -156,6 +166,9 @@ void hunty() {
 	int chance;
 	int goldChance;
 	int hgLoss;
+	int intGain;
+	int intLoss;
+	int cashLost;
 	system("CLS");
 
 	cout << "-*- COOK BMX! -*- " << endl;
@@ -166,34 +179,37 @@ void hunty() {
 	case 1:
 		system("CLS");
 		chance = rand() % 10;
-		goldChance = rand() % 50;
 		if (chance == 5) {
-			cout << "You bring back a bear, giving you " << 15 + RE.ingGain << " ingredients.\nYou also find " << goldChance << " cash." << endl;
-			Char.ing += 15 + RE.ingGain;
+            goldChance = rand() % 50 / Char.difficulty;
+            intGain = rand() % (15 + RE.ingGain) / Char.difficulty;
+            cout << "You bring back a bear, giving you " << intGain << " ingredients.\nYou also find " << goldChance << " cash." << endl;
+			Char.ing += intGain;
 			Char.cash += goldChance;
 			if (Char.race != "IPC") {
 				Char.soul -= 1;
 			}
 			hungerLost();
-			sanityLost();
-			Char.score += 5;
 			Char.enemiesk += 1;
+			Char.score += 3;
+			sanityLost();
 			wait_enter();
 		}
 		else if (chance == 4) {
-			cout << "You get attacked and lose some supplies...\n-5 ING\n-30 Cash" << endl;
-			Char.cash -= 30;
-			Char.ing -= 5;
+		    intLoss = rand() % 5 * Char.difficulty;
+            goldChance = rand() % 30 * Char.difficulty;
+			cout << "You get attacked and lose some supplies...\n-" << intLoss << " ING\n-" << goldChance << " Cash" << endl;
+			Char.cash -= goldChance;
+			Char.ing -= intLoss;
 			Char.soul -= 1;
 			hungerLost();
-			sanityLost();
 			Char.score -= 10;
-			Char.enemiesk += 1;
+			sanityLost();
 			wait_enter();
 		}
 		else if (chance < 4) {
-			cout << "You find a possum and kill it. You gain " << 5 + RE.ingGain << " ingredients." << endl;
-			Char.ing += 5 + RE.ingGain;
+            intGain = rand() % (5 + RE.ingGain) / Char.difficulty;
+			cout << "You find a possum and kill it. You gain " << intGain << " ingredients." << endl;
+			Char.ing += intGain;
 			if (Char.race == "IPC") {
 				Char.soul -= 3;
 			}
@@ -201,9 +217,9 @@ void hunty() {
 				Char.soul -= 1;
 			}
 			hungerLost();
-			Char.score += 1;
-			Char.enemiesk += 1;
 			sanityLost();
+			Char.enemiesk += 1;
+			Char.score += 1;
 			wait_enter();
 		}
 		else if (chance > 5) {
@@ -217,31 +233,37 @@ void hunty() {
 	case 2:
 		system("CLS");
 		chance = rand() % 10;
-		goldChance = rand() % 50;
 		if (chance < 4) {
-			cout << "You bring back a bear, giving you " << 15 + RE.ingGain << " ingredients.\nYou also find " << goldChance << " cash." << endl;
-			Char.ing += 15 + RE.ingGain;
+            goldChance = rand() % 50 / Char.difficulty;
+            intGain = rand() % (15 + RE.ingGain) / Char.difficulty;
+            cout << "You bring back a bear, giving you " << intGain << " ingredients.\nYou also find " << goldChance << " cash." << endl;
+			Char.ing += intGain;
 			Char.cash += goldChance;
 			if (Char.race != "IPC") {
 				Char.soul -= 1;
 			}
 			hungerLost();
 			Char.enemiesk += 1;
+			Char.score += 3;
 			sanityLost();
 			wait_enter();
 		}
 		else if (chance > 5) {
-			cout << "You get attacked and lose some supplies...\n-5 ING\n-30 Cash" << endl;
-			Char.cash -= 30;
-			Char.ing -= 5;
+            intLoss = rand() % 5 * Char.difficulty;
+            goldChance = rand() % 30 * Char.difficulty;
+			cout << "You get attacked and lose some supplies...\n-" << intLoss << " ING\n-" << goldChance << " Cash" << endl;
+			Char.cash -= goldChance;
+			Char.ing -= intLoss;
 			Char.soul -= 1;
 			hungerLost();
+			Char.score -= 10;
 			sanityLost();
 			wait_enter();
 		}
 		else if (chance == 5) {
-			cout << "You find a possum and kill it. You gain " << 5 + RE.ingGain << " ingredients." << endl;
-			Char.ing += 5 + RE.ingGain;
+            intGain = rand() % (5 + RE.ingGain) / Char.difficulty;
+			cout << "You find a possum and kill it. You gain " << intGain << " ingredients." << endl;
+			Char.ing += intGain;
 			if (Char.race == "IPC") {
 				Char.soul -= 3;
 			}
@@ -251,6 +273,7 @@ void hunty() {
 			hungerLost();
 			sanityLost();
 			Char.enemiesk += 1;
+			Char.score += 1;
 			wait_enter();
 		}
 		break;
@@ -265,7 +288,7 @@ void victory() {
 	cout << "\nYour score is: ";
 	k = 11;
 	SetConsoleTextAttribute(hConsole, k);
-	cout << Char.score * Char.scoremp;
+	cout << (Char.score * Char.scoremp) * Char.difficulty;
 	k = 15;
 	SetConsoleTextAttribute(hConsole, k);
 	cout << "!\n\nCreatures Killed: ";
@@ -283,7 +306,7 @@ void victory() {
 	cout << " Days\n\nStats: \nName: ";
 	k = 11;
 	SetConsoleTextAttribute(hConsole, k);
-	cout << Char.name; 
+	cout << Char.name;
 	k = 15;
 	SetConsoleTextAttribute(hConsole, k);
 	cout << "\nRace: ";
@@ -306,8 +329,21 @@ void victory() {
 	SetConsoleTextAttribute(hConsole, k);
 	cout << ") NO." << endl;
 	cin >> looptest;
+    switch(looptest) {
+    case 1:
+    if(Char.route == "Sandia Crest") {
+        Char.scoremp += .1;
+        Char.day = 15 * Char.scoremp;
+    } else if(Char.route == "Himalayas") {
+        Char.scoremp += .25;
+        Char.day = 35 * Char.scoremp;
+    } else if(Char.route == "The Alps") {
+        Char.scoremp += 1;
+        Char.day = 100 * Char.scoremp;
+    }
+    break;
+    }
 
-	
 
 }
 
@@ -399,6 +435,7 @@ void cookSGO() {
 			hunty();
 			break;
 		case 4:
+		    stats();
 			break;
 		}
 	}
@@ -408,23 +445,23 @@ void cookStart() {
 	int input1;
 	system("CLS");
 	cout << "-*- Choose Route -*-" << endl;
-	cout << "\n1) Sandia Crest - 15 Days\n2) Himilayas - 35 Days\n3) The Alps - 100 Days" << endl;
+	cout << "\n1) Sandia Crest - 15 Days\n2) Himalayas - 35 Days\n3) The Alps - 100 Days" << endl;
 	cin >> input1;
 	switch (input1) {
 	case 1:
 		Char.route = "Sandia Crest";
 		Char.day = 15;
-		Char.scoremp = .5;
+		Char.scoremp = 1;
 		break;
 	case 2:
-		Char.route = "Himilayas";
+		Char.route = "Himalayas";
 		Char.day = 35;
-		Char.scoremp = 1;
+		Char.scoremp = 1.25;
 		break;
 	case 3:
 		Char.route = "The Alps";
 		Char.day = 100;
-		Char.scoremp = 2;
+		Char.scoremp = 2.5;
 		break;
 	}
 	system("CLS");
@@ -466,7 +503,34 @@ void cookStart() {
 		break;
 	}
 	system("CLS");
-	cout << "Whats your name?" << endl;
+	cout << "-*- Choose Your Difficulty -*-" << endl;
+	cout << "\n1) Starter\n2) Bicyclist\n3) Veteran\n4) War Bicyclist\n5) Brutal Nightmare Hell-Bicyclist" << endl;
+    cin >> input1;
+    switch(input1) {
+    case 1:
+        Char.difficulty = .75;
+        Char.difficultyname = "Starter";
+    break;
+    case 2:
+        Char.difficulty = 1;
+        Char.difficultyname = "Bicyclist";
+    break;
+    case 3:
+        Char.difficulty = 1.75;
+        Char.difficultyname = "Veteran";
+    break;
+    case 4:
+        Char.difficulty = 2.25;
+        Char.difficultyname = "War Bicyclist";
+    break;
+    case 5:
+        Char.difficulty = 3;
+        Char.difficultyname = "Brutal Nightmare Hell-Bicyclist";
+    break;
+    }
+	system("CLS");
+	cout << "-*- Choose Your Name -*-" << endl;
+	cout << "\nWhats your name?" << endl;
 	cin.ignore();
 	getline(cin, Char.name);
 	for (size_t i = 0; i < Char.name.size(); i++) {
@@ -492,4 +556,3 @@ int main()
 	}
 	return 0;
 }
-
