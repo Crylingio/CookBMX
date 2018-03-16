@@ -80,6 +80,9 @@ void statCheck() {
 	}
 	if (Char.ing < 0) {
 		Char.ing = 0;
+	} 
+	if (Char.cash < 0) {
+		Char.cash = 0;
 	}
 }
 
@@ -87,18 +90,58 @@ void statCheck() {
 
 void bikeEvent() {
 	int temp;
+	int temp2;
 	int daylost;
 	temp = rand() % 10;
+	temp2 = rand() % 5;
 	system("CLS");
 	cout << "-*- Event While Biking -*-\n" << endl;
 	if (temp <= 5) {
-		if (Char.san <= 50) {
+		if (Char.san <= 0) {
+		if (Char.route == "Sandia Crest") {
+			Char.day = 15 * Char.scoremp;
+		}
+		else if (Char.route == "Himalayas") {
+			Char.day = 35 * Char.scoremp;
+		}
+		else if (Char.route == "The Alps") {
+			Char.day = 100 * Char.scoremp;
+		}
+			cout << "You think you see a bridge up ahead. Instead its a cliff.\nYou bike off the cliff and lose all your supplies and progress." << endl;
+			cout << "You have to bike back, you are set back to " << Char.day << " Days." << endl;
+			Char.ing = 0;
+			Char.hg = 25;
+			Char.cash = 0;
+			Char.san = 75;
+			Char.soul = 75;
+			Char.bikeHP = 10;
+		}
+		else if (Char.san <= 25) {
+			daylost = 2 * Char.difficulty;
+			cout << "While biking the wrong path, you start to wander even deeper into the\nforest." << endl;
+			cout << "Losing " << daylost << " days..." << endl;
+			Char.day += daylost;
+			Char.score -= 3;
+		}
+		else if (Char.san <= 65) {
 			daylost = 1 * Char.difficulty;
 			cout << "You hallucinate while biking, and you follow the wrong path." << endl;
 			cout << "Lost " << daylost << " days..." << endl;
 			Char.day += daylost;
+			Char.score -= 2;
+		}
+		else if (Char.san >= 66) {
+			cout << "You don't see anything unusual on the path.\nOnly some nice trees and fleeing possums." << endl;
 		}
 		wait_enter();
+	}
+	else if (temp >= 5) {
+		if (temp2 <= 1) {
+			cout << "You see some Kobolds up ahead stealing things from a person.\n\n1) Avoid those scalies\n2) Charge in Bike in hand" << endl;
+
+
+
+		}
 	}
 
 }
